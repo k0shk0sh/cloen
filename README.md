@@ -1,6 +1,6 @@
 # cloen
 
-`git clone` wrapper. Clones a repository, cds into it, and opens it in $EDITOR|$GUI_EDITOR.
+`git clone` wrapper. Clones a repository, cds into it, and opens it in `$EDITOR`|`$GUI_EDITOR`.
 
 Set GITHUB_USERNAME environment variable in your .bashrc, .zshrc or equivalent.
 Example, `export GITHUB_USERNAME="username"`
