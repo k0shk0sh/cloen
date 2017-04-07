@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+
+##
+# `git clone` wrapper.
+# Clones a repository, cds into it, and opens it in $EDITOR|$GUI_EDITOR.
+#
+# USAGE
+#   See `show_usage()` function below for more information or start this program
+#   without arguments.
+#
+# @author Kutsan Kaplan <me@kutsankaplan.com>
+# @license MIT
+##
+
+set -euo pipefail
+
+error() { echo -e "\n\033[31m  error \033[0m$1\n"; >&2; }
+
+show_usage()
+{
+cat << EOF
+
+  \`git clone\` wrapper.
+  Clones a repository, cds into it, and opens it in $EDITOR|$GUI_EDITOR.
+
+  Set GITHUB_USERNAME environment variable in your .bashrc, .zshrc or equivalent.
+  Example, \`export GITHUB_USERNAME="username"\`
+
+  SYNOPSIS
+    $ cloen [options] <repo-url|username/repo-name|own-repo-name>
+
+  OPTIONS
+    -n
+      Don't use full name. Default is on. Normally, repositories clone into their
+      repository name with "<author>--<repo-name>" format. Like \`$ cloen kutsan/dotfiles\`
+      clones into \`kutsan--dotfiles\` directory. If this option specified, it clones into
+      \`dotfiles\` folder without dashes.
+
+    -o
+      Open editor, after clone finished. Default is off. If \$GUI_EDITOR or \$EDITOR globally
+      specified, then repository will open in it, as \$GUI_EDITOR primacy. Otherwise, \`vim\`
+      will be used as default.
+
+    -e <editor>
+      Open with selected editor, after clone finished. No need extra \`-o\` flag. Note that,
+      editor executable must be under your \$PATH and it must accept directory with its
+      first argument.
+
+    -h
+      Show this help screen.
+
+  EXAMPLES
+    $ cloen <repo-name>
+      .. git clone git@github.com:<GITHUB_USERNAME>/<repo-name>.git <repo-name>
+      .. cd <username>--<repo-name>
+
+    $ cloen -o <username>/<repo-name>
+      .. git clone git@github.com:<username>/<repo-name>.git <repo-name>
+      .. cd <username>--<repo-name>
+      .. \$EDITOR .
+
+    $ cloen git@github.com:<username>/<repo-name>.git (or HTTP(S) link)
+      .. git clone git@github.com:<username>/<repo-name>.git <repo-name>
+      .. cd <username>--<repo-name>
+
+    $ cloen -ne emacs <username>/<repo-name>
+      .. git clone git@github.com:<username>/<repo-name>.git <username>--<repo-name>
+      .. cd <repo-name>
+      .. emacs .
+
+EOF
+
+	exit
+}
+
+# Default values
+set_defaults() {
+	if [[ -n $GITHUB_USERNAME ]]; then
+		username="$GITHUB_USERNAME"
+	else
+		error "Please export \$GITHUB_USERNAME as environment variable."
+		exit 1
+	fi
+
+	open_editor='false'
+	use_full_name='true'
+	[[ -n $GUI_EDITOR ]] && edit=$GUI_EDITOR || edit=${EDITOR:=vim}
+}
+
+# Override defaults with flags
+process_args() {
+	while getopts ":hone:" opt; do
+		case $opt in
+			h) show_usage; exit ;;
+			n) use_full_name='false' ;;
+			o) open_editor='true' ;;
+			e) open_editor='true'; edit="$OPTARG" ;;
+			\?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+			*) error "Unknown error while processing flags."; exit 1 ;;
+		esac
+	done
+
+	ARG1=${@:$OPTIND:1}
+	ARG2=${@:$OPTIND+1:1}
+}
+
+# What format user specified
+determinate_what_will_be_cloned() {
+	# $ cloen <repo-url>
+	if [[ ${ARG1:0:4} == 'http' || ${ARG1:0:3} == 'git' ]]; then
+		url=$ARG1
+
+		# Parse repo name from URL for directory name
+		repo=$(echo $url | awk -F/ '{print $NF}' | sed -e 's/.git$//')
+
+	# $ cloen <username>/<repo-name>
+	elif [[ $ARG1 =~ "/"  ]]; then
+		username=$(dirname "$ARG1")
+		repo=$(basename "$ARG1")
+		url="git@github.com:$username/$repo"
+
+	# $ cloen <repo-name>
+	else
+		repo=$ARG1
+		url="git@github.com:$username/$repo"
+	fi
+}
+
+main()
+{
+	# If there are no parameters, show help and exit.
+	if [[ "$#" == 0 ]]; then
+		show_usage
+		exit
+	fi
+
+	set_defaults
+	process_args "$@"
+	determinate_what_will_be_cloned
+
+	if [[ $use_full_name == 'true' ]]; then
+		repo=$(echo "$url" | perl -pe 's/.+(\w|-|_|\.)+\.\w+(\/|:)//' | perl -pe 's/\//--/')
+	fi
+
+	git clone "$url" "$repo" && cd "$repo"
+
+	if [[ $open_editor == 'true' ]]; then
+		$edit .
+	fi
+}
+
+main "$@"

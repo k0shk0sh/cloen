@@ -1,0 +1,27 @@
+{
+  "name": "cloen",
+  "version": "0.1.0",
+  "description": "`git clone` wrapper. Clones a repository, cds into it, and opens it in $EDITOR|$GUI_EDITOR.",
+  "preferGlobal": true,
+  "license": "MIT",
+  "author": "Kutsan Kaplan <me@kutsankaplan.com> (https://kutsankaplan.com)",
+  "keywords": [
+    "git",
+    "clone",
+    "wrapper"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kutsan/cloen"
+  },
+  "bugs": {
+    "url": "https://github.com/kutsan/cloen/issues"
+  },
+  "bin": "./bin/cloen",
+  "scripts": {
+    "start": "bash ./bin/cloen",
+    "test": ""
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
