@@ -5,6 +5,8 @@
 Set GITHUB_USERNAME environment variable in your .bashrc, .zshrc or equivalent.
 Example, `export GITHUB_USERNAME="username"`
 
+![](https://i.imgur.com/1EPYZF2.gif)
+
 ## Install
 
 ### npm
