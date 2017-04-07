@@ -49,19 +49,17 @@ Show help screen.
 ## Examples
 
     $ cloen <repo-name>
-      .. git clone git@github.com:<GITHUB_USERNAME>/<repo-name>.git <repo-name>
-      .. cd <username>--<repo-name>
+      .. git clone git@github.com:<GITHUB_USERNAME>/<repo-name>.git <username>--<repo-name>
 
     $ cloen -o <username>/<repo-name>
-      .. git clone git@github.com:<username>/<repo-name>.git <repo-name>
+      .. git clone git@github.com:<username>/<repo-name>.git <username>--<repo-name>
       .. cd <username>--<repo-name>
-      .. \$EDITOR .
+      .. $EDITOR .
 
     $ cloen git@github.com:<username>/<repo-name>.git (or HTTP(S) link)
-      .. git clone git@github.com:<username>/<repo-name>.git <repo-name>
-      .. cd <username>--<repo-name>
+      .. git clone git@github.com:<username>/<repo-name>.git <username>--<repo-name>
 
     $ cloen -ne emacs <username>/<repo-name>
-      .. git clone git@github.com:<username>/<repo-name>.git <username>--<repo-name>
+      .. git clone git@github.com:<username>/<repo-name>.git <repo-name>
       .. cd <repo-name>
       .. emacs .
