@@ -2,8 +2,8 @@
 
 `git clone` wrapper. Clones a repository, cds into it, and opens it in `$EDITOR`|`$GUI_EDITOR`.
 
-Set GITHUB_USERNAME environment variable in your .bashrc, .zshrc or equivalent.
-Example, `export GITHUB_USERNAME="username"`
+Set `GITHUB_USERNAME` environment variable in your .bashrc, .zshrc or equivalent.  
+Example, `export GITHUB_USERNAME="username"`.
 
 ![](https://i.imgur.com/1EPYZF2.gif)
 
@@ -11,7 +11,7 @@ Example, `export GITHUB_USERNAME="username"`
 
 ### npm
 
-`npm i cloen -g`
+    npm i cloen -g
 
 ### Manual
 
@@ -19,30 +19,30 @@ Take `bin/cloen` binary and put it somewhere that's in your `$PATH`.
 
 ## Synopsis
 
-`$ cloen [options] <repo-url|username/repo-name|own-repo-name>`
+    $ cloen [options] <repo-url|username/repo-name|own-repo-name>
 
 ## Options
 
-#### -n
+`-n`
 
 Don't use full name. Default is on. Normally, repositories clone into their
 repository name with `<author>--<repo-name>` format. Like `$ cloen kutsan/dotfiles`
 clones into `kutsan--dotfiles` directory. If this option specified, it clones into
 `dotfiles` folder without dashes.
 
-#### -o
+`-o`
 
-Open editor, after clone finished. Default is off. If $GUI_EDITOR or $EDITOR globally
-specified, then repository will open in it, as \$GUI_EDITOR primacy. Otherwise, `vim`
+Open editor, after clone finished. Default is off. If `$GUI_EDITOR` or `$EDITOR` globally
+specified, then repository will open in it, as `$GUI_EDITOR` primacy. Otherwise, `vim`
 will be used as default.
 
-#### -e <editor>
+`-e <editor>`
 
 Open with selected editor, after clone finished. No need extra `-o` flag. Note that,
-editor executable must be under your \$PATH and it must accept directory with its
+editor executable must be under your `$PATH` and it must accept directory with its
 first argument.
 
-#### -h --help
+`-h --help`
 
 Show help screen.
 
